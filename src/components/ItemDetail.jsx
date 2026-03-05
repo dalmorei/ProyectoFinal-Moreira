@@ -1,10 +1,15 @@
+import { useState } from "react"
 import { Link } from "react-router-dom"
+import { useCart } from "../context/CartContext"
 import ItemCount from "./ItemCount"
 
 const ItemDetail = ({ product }) => {
+  const [quantityAdded, setQuantityAdded] = useState(0)
+  const { addItem } = useCart()
+
   const handleOnAdd = (quantity) => {
-    console.log(`Agregado al carrito: ${quantity} unidades de ${product.title}`)
-    // Aquí se implementaría la lógica para agregar al carrito
+    setQuantityAdded(quantity)
+    addItem(product, quantity)
   }
 
   const getCategoryName = (categoryId) => {
@@ -72,11 +77,27 @@ const ItemDetail = ({ product }) => {
         </div>
 
         <div className="mb-4">
-          <ItemCount 
-            stock={product.stock}
-            initial={1}
-            onAdd={handleOnAdd}
-          />
+          {quantityAdded > 0 ? (
+            <div>
+              <div className="alert alert-success mb-3">
+                ✓ Agregaste {quantityAdded} unidad(es) al carrito
+              </div>
+              <div className="d-flex gap-2">
+                <Link to="/cart" className="btn btn-success">
+                  Ir al carrito
+                </Link>
+                <Link to="/" className="btn btn-primary">
+                  Seguir comprando
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <ItemCount 
+              stock={product.stock}
+              initial={1}
+              onAdd={handleOnAdd}
+            />
+          )}
         </div>
 
         <div className="d-flex gap-2">

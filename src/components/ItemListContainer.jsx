@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
-import { getProducts, getProductsByCategory } from "../data/products"
+import { getProductsFromFirestore, getProductsByCategoryFromFirestore } from "../firebase/firestore"
 import ItemList from "./ItemList"
 
 const ItemListContainer = () => {
@@ -12,8 +12,8 @@ const ItemListContainer = () => {
     setLoading(true)
     
     const asyncFunc = categoryId 
-      ? getProductsByCategory(categoryId)
-      : getProducts()
+      ? getProductsByCategoryFromFirestore(categoryId)
+      : getProductsFromFirestore()
 
     asyncFunc
       .then(response => {
